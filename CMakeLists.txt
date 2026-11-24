@@ -146,8 +146,22 @@ if (KF6Baloo_FOUND AND KF6BalooWidgets_FOUND)
         Multimedia
         MultimediaWidgets
     )
+    set(HAVE_INFORMATION_PANEL TRUE)
 else ()
-    message(WARNING "Baloo packages not found. They are needed for the metadata features of Dolphin (including the information panel).")
+    message(WARNING "Baloo packages not found. They are needed for the metadata features of Dolphin (tags, ratings, comments and search). The information panel will show basic details only.")
+
+    # Without Baloo (e.g. on Windows) the information panel is built with
+    # Dolphin's own basic details widget. It still needs Qt Multimedia for
+    # the audio and video preview.
+    find_package(Qt6 ${QT_MIN_VERSION} CONFIG OPTIONAL_COMPONENTS
+        Multimedia
+        MultimediaWidgets
+    )
+    if (Qt6Multimedia_FOUND AND Qt6MultimediaWidgets_FOUND)
+        set(HAVE_INFORMATION_PANEL TRUE)
+    else ()
+        message(WARNING "Qt Multimedia not found. The information panel will not be built.")
+    endif()
 endif()
 
 # TODO: drop HAVE_TERMINAL once we are sure the terminal panel works on Windows too.

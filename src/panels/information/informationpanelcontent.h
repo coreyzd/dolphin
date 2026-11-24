@@ -8,6 +8,7 @@
 #define INFORMATIONPANELCONTENT_H
 
 #include "config-dolphin.h"
+#include "informationpanelmetadata.h"
 #include <KFileItem>
 
 #include <QPointer>
@@ -28,11 +29,6 @@ class QGestureEvent;
 namespace KIO
 {
 class PreviewJob;
-}
-
-namespace Baloo
-{
-class FileMetaDataWidget;
 }
 
 /**
@@ -163,7 +159,7 @@ private:
     PixmapViewer *m_preview;
     MediaWidget *m_mediaWidget;
     QTextEdit *m_nameLabel;
-    Baloo::FileMetaDataWidget *m_metaDataWidget;
+    InformationPanelMetaData::Widget *m_metaDataWidget;
     QScrollArea *m_metaDataArea;
     QLabel *m_configureLabel;
     QDialogButtonBox *m_configureButtons;

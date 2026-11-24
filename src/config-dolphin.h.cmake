@@ -1,5 +1,6 @@
 /** Set whether to build Dolphin with support for these technologies or not. */
 #cmakedefine01 HAVE_BALOO
+#cmakedefine01 HAVE_INFORMATION_PANEL
 #cmakedefine01 HAVE_KUSERFEEDBACK
 #cmakedefine01 HAVE_PACKAGEKIT
 #cmakedefine01 HAVE_TERMINAL

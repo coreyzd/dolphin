@@ -430,7 +430,7 @@ target_sources(dolphinstatic PRIVATE
     global.h
 )
 
-if(HAVE_BALOO)
+if(HAVE_INFORMATION_PANEL)
     target_sources(dolphinstatic PRIVATE
         panels/information/informationpanel.cpp
         panels/information/informationpanelcontent.cpp
@@ -440,7 +440,16 @@ if(HAVE_BALOO)
         panels/information/informationpanelcontent.h
         panels/information/pixmapviewer.h
         panels/information/mediawidget.h
+        panels/information/informationpanelmetadata.h
     )
+
+    if(NOT HAVE_BALOO)
+        # Stand-in for Baloo::FileMetaDataWidget
+        target_sources(dolphinstatic PRIVATE
+            panels/information/basicfilemetadatawidget.cpp
+            panels/information/basicfilemetadatawidget.h
+        )
+    endif()
 
     kconfig_add_kcfg_files(dolphinstatic
         panels/information/dolphin_informationpanelsettings.kcfgc

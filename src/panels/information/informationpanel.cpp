@@ -6,7 +6,9 @@
 
 #include "informationpanel.h"
 
+#include "config-dolphin.h"
 #include "informationpanelcontent.h"
+#include "informationpanelmetadata.h"
 
 #define HAVE_KDIRNOTIFY __has_include(<KDirNotify>)
 #if HAVE_KDIRNOTIFY
@@ -15,8 +17,6 @@
 #include <KIO/StatJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
-
-#include <Baloo/FileMetaDataWidget>
 
 #include <QApplication>
 #include <QMenu>
@@ -167,16 +167,20 @@ void InformationPanel::showContextMenu(const QPoint &pos)
     showHoveredAction->setCheckable(true);
     showHoveredAction->setChecked(InformationPanelSettings::showHovered());
 
-    QAction *configureAction = popup.addAction(i18nc("@action:inmenu", "Configure…"));
+    // Choosing which details are shown is a feature of Baloo's widget.
+    QAction *configureAction = nullptr;
+#if HAVE_BALOO
+    configureAction = popup.addAction(i18nc("@action:inmenu", "Configure…"));
     configureAction->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     if (m_inConfigurationMode) {
         configureAction->setEnabled(false);
     }
+#endif
 
     QAction *dateformatAction = popup.addAction(i18nc("@action:inmenu", "Condensed Date"));
     dateformatAction->setIcon(QIcon::fromTheme(QStringLiteral("change-date-symbolic")));
     dateformatAction->setCheckable(true);
-    dateformatAction->setChecked(InformationPanelSettings::dateFormat() == static_cast<int>(Baloo::DateFormats::ShortFormat));
+    dateformatAction->setChecked(InformationPanelSettings::dateFormat() == static_cast<int>(InformationPanelMetaData::DateFormats::ShortFormat));
 
     popup.addSeparator();
     const auto actions = customContextMenuActions();
@@ -208,7 +212,7 @@ void InformationPanel::showContextMenu(const QPoint &pos)
         m_inConfigurationMode = true;
         m_content->configureShownProperties();
     } else if (action == dateformatAction) {
-        int dateFormat = static_cast<int>(isChecked ? Baloo::DateFormats::ShortFormat : Baloo::DateFormats::LongFormat);
+        int dateFormat = static_cast<int>(isChecked ? InformationPanelMetaData::DateFormats::ShortFormat : InformationPanelMetaData::DateFormats::LongFormat);
 
         InformationPanelSettings::setDateFormat(dateFormat);
         m_content->refreshMetaData();

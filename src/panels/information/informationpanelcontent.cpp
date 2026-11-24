@@ -20,8 +20,6 @@
 #include <QStyle>
 #include <QTextDocument>
 
-#include <Baloo/FileMetaDataWidget>
-
 #include <QDialogButtonBox>
 #include <QGesture>
 #include <QLabel>
@@ -93,9 +91,9 @@ InformationPanelContent::InformationPanelContent(QWidget *parent)
     const bool previewsShown = InformationPanelSettings::previewsShown();
     m_preview->setVisible(previewsShown);
 
-    m_metaDataWidget = new Baloo::FileMetaDataWidget(parent);
-    m_metaDataWidget->setDateFormat(static_cast<Baloo::DateFormats>(InformationPanelSettings::dateFormat()));
-    connect(m_metaDataWidget, &Baloo::FileMetaDataWidget::urlActivated, this, &InformationPanelContent::urlActivated);
+    m_metaDataWidget = new InformationPanelMetaData::Widget(parent);
+    m_metaDataWidget->setDateFormat(static_cast<InformationPanelMetaData::DateFormats>(InformationPanelSettings::dateFormat()));
+    connect(m_metaDataWidget, &InformationPanelMetaData::Widget::urlActivated, this, &InformationPanelContent::urlActivated);
     m_metaDataWidget->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     m_metaDataWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 
@@ -107,13 +105,13 @@ InformationPanelContent::InformationPanelContent(QWidget *parent)
     m_configureButtons = new QDialogButtonBox(QDialogButtonBox::Save | QDialogButtonBox::Cancel);
     m_configureButtons->setVisible(false);
     connect(m_configureButtons, &QDialogButtonBox::accepted, this, [this]() {
-        m_metaDataWidget->setConfigurationMode(Baloo::ConfigurationMode::Accept);
+        m_metaDataWidget->setConfigurationMode(InformationPanelMetaData::ConfigurationMode::Accept);
         m_configureButtons->setVisible(false);
         m_configureLabel->setVisible(false);
         Q_EMIT configurationFinished();
     });
     connect(m_configureButtons, &QDialogButtonBox::rejected, this, [this]() {
-        m_metaDataWidget->setConfigurationMode(Baloo::ConfigurationMode::Cancel);
+        m_metaDataWidget->setConfigurationMode(InformationPanelMetaData::ConfigurationMode::Cancel);
         m_configureButtons->setVisible(false);
         m_configureLabel->setVisible(false);
         Q_EMIT configurationFinished();
@@ -301,12 +299,12 @@ void InformationPanelContent::configureShownProperties()
 {
     m_configureLabel->setVisible(true);
     m_configureButtons->setVisible(true);
-    m_metaDataWidget->setConfigurationMode(Baloo::ConfigurationMode::ReStart);
+    m_metaDataWidget->setConfigurationMode(InformationPanelMetaData::ConfigurationMode::ReStart);
 }
 
 void InformationPanelContent::refreshMetaData()
 {
-    m_metaDataWidget->setDateFormat(static_cast<Baloo::DateFormats>(InformationPanelSettings::dateFormat()));
+    m_metaDataWidget->setDateFormat(static_cast<InformationPanelMetaData::DateFormats>(InformationPanelSettings::dateFormat()));
     m_metaDataWidget->show();
     m_metaDataWidget->setItems(KFileItemList() << m_item);
 }

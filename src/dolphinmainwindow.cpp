@@ -327,7 +327,7 @@ bool DolphinMainWindow::isFoldersPanelEnabled() const
 
 bool DolphinMainWindow::isInformationPanelEnabled() const
 {
-#if HAVE_BALOO
+#if HAVE_INFORMATION_PANEL
     return actionCollection()->action(QStringLiteral("show_information_panel"))->isChecked();
 #else
     return false;
@@ -2394,7 +2394,7 @@ void DolphinMainWindow::setupDockWidgets()
     infoDock->setObjectName(QStringLiteral("infoDock"));
     infoDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-#if HAVE_BALOO
+#if HAVE_INFORMATION_PANEL
     InformationPanel *infoPanel = new InformationPanel(infoDock);
     infoPanel->setCustomContextMenuActions({lockLayoutAction});
     connect(infoPanel, &InformationPanel::urlActivated, this, &DolphinMainWindow::handleUrl);
@@ -2415,7 +2415,7 @@ void DolphinMainWindow::setupDockWidgets()
                                           "<para>To show or "
                                           "hide panels like this go to <interface>Menu|Panels</interface> "
                                           "or <interface>View|Panels</interface>.</para>");
-#if HAVE_BALOO
+#if HAVE_INFORMATION_PANEL
     actionCollection()
         ->action(QStringLiteral("show_information_panel"))
         ->setWhatsThis(xi18nc("@info:whatsthis",
@@ -2619,7 +2619,7 @@ void DolphinMainWindow::setupDockWidgets()
     panelsMenu->setPopupMode(QToolButton::InstantPopup);
     const KActionCollection *ac = actionCollection();
     panelsMenu->addAction(ac->action(QStringLiteral("show_places_panel")));
-#if HAVE_BALOO
+#if HAVE_INFORMATION_PANEL
     panelsMenu->addAction(ac->action(QStringLiteral("show_information_panel")));
 #endif
     panelsMenu->addAction(ac->action(QStringLiteral("show_folders_panel")));
